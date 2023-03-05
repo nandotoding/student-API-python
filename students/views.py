@@ -37,8 +37,6 @@ def students(request):
 @csrf_exempt
 def student(request, id):
     response = {}
-    # students = Student.objects.all()
-    # student = students.get(id=id)
     student_obj = Student.objects.filter(id=id)
 
     if request.method == 'GET':
