@@ -37,17 +37,32 @@ def students(request):
 @csrf_exempt
 def student(request, id):
     response = {}
-    students = Student.objects.all()
+    # students = Student.objects.all()
+    # student = students.get(id=id)
+    student_obj = Student.objects.filter(id=id)
 
     if request.method == 'GET':
         response = {
             'message': 'successfully get student',
-            'data': dict(students.values().get(id=id)),
+            'data': dict(student_obj.values()[0]),
         }
     elif request.method == 'DELETE':
-        students.get(id=id).delete()
+        student_obj.delete()
         response = {
             'message': 'successfully delete student {}'.format(id),
+        }
+    elif request.method == 'PUT':
+        payload = json.loads(request.body)
+        student = Student.objects.all().get(id=id)
+        student.studentName = payload['studentName']
+        student.studentMajor = payload['studentMajor']
+        student.studentAge = payload['studentAge']
+        student.save()
+        response = {
+            'message': 'successfully update student',
+            'data': {
+                'id': id,
+            },
         }
     else:
         response = {
