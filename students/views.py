@@ -7,9 +7,9 @@ from .models import Student
 @csrf_exempt
 def students(request):
     response = {}
+    students = Student.objects.all().values()
 
     if request.method == 'GET':
-        students = Student.objects.all().values()
         response = {
             'message': 'successfully get all students',
             'data': list(students),
@@ -24,7 +24,7 @@ def students(request):
         student.save()
         response = {
             'message': 'successfully add student',
-            'data': dict(Student.objects.all().values().get(id=student.id)),
+            'data': dict(students.get(id=student.id)),
         }
     else:
         response = {
